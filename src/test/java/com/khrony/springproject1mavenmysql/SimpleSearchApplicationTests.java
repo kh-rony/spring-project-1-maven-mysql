@@ -1,4 +1,4 @@
-package com.khrony.simplesearchapplication;
+package com.khrony.springproject1mavenmysql;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

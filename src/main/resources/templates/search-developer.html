@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main}">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Developer</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <br>
+    <br>
+    <br>
+
+    <div class="container">
+
+        <fieldset>
+            <!--<legend>Do you want to create board for '<span th:text="${boardName}">Board Name</span>'?</legend>-->
+            <legend>Search Developer who knows</legend>
+            <br>
+
+            <form class="form-horizontal" role="form" method="post" th:action="@{/search-result}">
+
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <span class="form-check" th:each="programmingLanguage : ${programmingLanguages}">
+                            <input class="form-check-input" type="checkbox" name="programming-languages" th:value="${programmingLanguage.getID()}" th:text="${programmingLanguage.getName()}">
+                        </span>
+                    </div>
+                    <div class="col-sm-3">
+                        <span class="form-check" th:each="language : ${languages}">
+                            <input class="form-check-input" type="checkbox" name="languages" th:value="${language.getID()}" th:text="${language.getName()}">
+                        </span>
+                    </div>
+                </div>
+
+                <br>
+
+                <div class="form-group col-6">
+                    <button type="submit" class="btn btn-outline-primary">Search</button>
+                </div>
+
+            </form>
+
+        </fieldset>
+
+    </div>
+
+    <br>
+    <br>
+    <br>
+
+</div>
+
+</body>
+</html>
