@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface ProgrammingLanguageRepository extends JpaRepository<ProgrammingLanguage, Long>
 {
-	List<ProgrammingLanguage> findByName(String name);
+	ProgrammingLanguage findByNameIgnoreCase(String name);
 }

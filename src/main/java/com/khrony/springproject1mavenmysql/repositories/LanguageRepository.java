@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface LanguageRepository extends JpaRepository<Language, Long>
 {
-	List<Language> findByName(String name);
+	List<Language> findByNameIgnoreCase(String name);
 }
