@@ -1,5 +1,6 @@
 package com.khrony.springproject1mavenmysql.controllers;
 
+import com.khrony.springproject1mavenmysql.dto.DeveloperWhoCanWrite;
 import com.khrony.springproject1mavenmysql.models.Developer;
 import com.khrony.springproject1mavenmysql.models.ProgrammingLanguage;
 import com.khrony.springproject1mavenmysql.repositories.DeveloperRepository;
@@ -13,9 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Controller
 public class DeveloperController
@@ -46,25 +45,35 @@ public class DeveloperController
 	}
 
 	@RequestMapping(value = "/search-developer-who-can-write", method = RequestMethod.POST)
-	public String showSearchResultPage(@RequestParam("selectedOnlyProgrammingLanguages[]") List<String> selectedProgrammingLanguages)
+	public String showSearchResultPage(@RequestParam("selectedOnlyProgrammingLanguages[]") List<String> selectedProgrammingLanguages, Model model)
 	{
 		System.out.println(selectedProgrammingLanguages);
 
-		List<ProgrammingLanguage> programmingLanguageList = new ArrayList<>();
-		ProgrammingLanguage programmingLanguage;
+		List<Developer> developerList = developerRepository.findAll();
+		List<DeveloperWhoCanWrite> developerWhoCanWriteList = new ArrayList<>();
 
-		Set<Developer> developerSet = new HashSet<Developer>(0);
+		List<String> programmingLanguageStringsOfDeveloper = new ArrayList<>();
 
-		for( String string : selectedProgrammingLanguages )
+
+		for(Developer developer : developerList)
 		{
-			programmingLanguage = programmingLanguageRepository.findByNameIgnoreCase(string);
-			programmingLanguageList.add(programmingLanguage);
-			developerSet.addAll(programmingLanguage.getDeveloperSet());
+			programmingLanguageStringsOfDeveloper.clear();
+
+			for( ProgrammingLanguage pl : developer.getProgrammingLanguageSet() )
+			{
+				programmingLanguageStringsOfDeveloper.add(pl.getName());
+			}
+
+
+			if( programmingLanguageStringsOfDeveloper.containsAll(selectedProgrammingLanguages) )
+			{
+				developerWhoCanWriteList.add(new DeveloperWhoCanWrite(developer.getEmail(), selectedProgrammingLanguages));
+			}
 		}
 
-		System.out.println(developerSet);
+		model.addAttribute("developerWhoCanWriteList", developerWhoCanWriteList);
 
-		return "search-result";
+		return "developers-who-can-write";
 	}
 
 	@RequestMapping(value = "/search-developer-who-can-write-and-speak", method = RequestMethod.POST)
@@ -73,6 +82,6 @@ public class DeveloperController
 		System.out.println(selectedProgrammingLanguages);
 		System.out.println(selectedLanguages);
 
-		return "search-result";
+		return "developers-who-can-write-and-speak";
 	}
 }
