@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/main}">
+<head>
+    <meta charset="UTF-8">
+    <title>All Developers</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <br>
+    <br>
+    <br>
+
+    <div class="container">
+
+        <fieldset>
+            <legend>All Developers</legend>
+            <br>
+
+            <table class="table table-hover table-bordered">
+                <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Programming Languages</th>
+                    <th>Languages</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="developerWhoCanWriteAndSpeak : ${developerWhoCanWriteAndSpeakList}">
+                    <td class="" th:text="${developerWhoCanWriteAndSpeak.getEmail()}"></td>
+                    <td class="" th:text="${developerWhoCanWriteAndSpeak.getProgrammingLanguageList()}"></td>
+                    <td class="" th:text="${developerWhoCanWriteAndSpeak.getLanguageList()}"></td>
+                </tr>
+                </tbody>
+
+            </table>
+
+        </fieldset>
+
+    </div>
+
+    <br>
+    <br>
+    <br>
+
+</div>
+
+</body>
+</html>

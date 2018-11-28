@@ -129,4 +129,44 @@ public class DeveloperController
 
 		return "developers-who-can-write-and-speak";
 	}
+
+	@RequestMapping(value = "/all-developers", method = RequestMethod.GET)
+	public String showAllDevelopersPage(Model model)
+	{
+		List<Developer> developerList = developerRepository.findAll();
+		List<DeveloperWhoCanWriteAndSpeak> developerWhoCanWriteAndSpeakList = new ArrayList<>();
+
+		List<String> programmingLanguageStringsOfDeveloper = new ArrayList<>();
+		List<String> languageStringsOfDeveloper = new ArrayList<>();
+
+		DeveloperWhoCanWriteAndSpeak developerWhoCanWriteAndSpeak;
+
+
+		for(Developer developer : developerList)
+		{
+			developerWhoCanWriteAndSpeak = new DeveloperWhoCanWriteAndSpeak();
+
+			programmingLanguageStringsOfDeveloper.clear();
+			languageStringsOfDeveloper.clear();
+
+			for( ProgrammingLanguage pl : developer.getProgrammingLanguageSet() )
+			{
+				programmingLanguageStringsOfDeveloper.add(pl.getName());
+			}
+			for( Language l : developer.getLanguageSet() )
+			{
+				languageStringsOfDeveloper.add(l.getName());
+			}
+
+			developerWhoCanWriteAndSpeak.setEmail(developer.getEmail());
+			developerWhoCanWriteAndSpeak.setProgrammingLanguageList(new ArrayList<String>(programmingLanguageStringsOfDeveloper));
+			developerWhoCanWriteAndSpeak.setLanguageList(new ArrayList<String>(languageStringsOfDeveloper));
+
+			developerWhoCanWriteAndSpeakList.add(developerWhoCanWriteAndSpeak);
+		}
+
+		model.addAttribute("developerWhoCanWriteAndSpeakList", developerWhoCanWriteAndSpeakList);
+
+		return "all-developers";
+	}
 }
