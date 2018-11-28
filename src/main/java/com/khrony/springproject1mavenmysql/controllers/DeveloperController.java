@@ -1,7 +1,9 @@
 package com.khrony.springproject1mavenmysql.controllers;
 
 import com.khrony.springproject1mavenmysql.dto.DeveloperWhoCanWrite;
+import com.khrony.springproject1mavenmysql.dto.DeveloperWhoCanWriteAndSpeak;
 import com.khrony.springproject1mavenmysql.models.Developer;
+import com.khrony.springproject1mavenmysql.models.Language;
 import com.khrony.springproject1mavenmysql.models.ProgrammingLanguage;
 import com.khrony.springproject1mavenmysql.repositories.DeveloperRepository;
 import com.khrony.springproject1mavenmysql.repositories.LanguageRepository;
@@ -47,8 +49,6 @@ public class DeveloperController
 	@RequestMapping(value = "/search-developer-who-can-write", method = RequestMethod.POST)
 	public String showSearchResultPage(@RequestParam("selectedOnlyProgrammingLanguages[]") List<String> selectedProgrammingLanguages, Model model)
 	{
-		System.out.println(selectedProgrammingLanguages);
-
 		List<Developer> developerList = developerRepository.findAll();
 		List<DeveloperWhoCanWrite> developerWhoCanWriteList = new ArrayList<>();
 
@@ -58,16 +58,13 @@ public class DeveloperController
 		for(Developer developer : developerList)
 		{
 			programmingLanguageStringsOfDeveloper.clear();
-
 			for( ProgrammingLanguage pl : developer.getProgrammingLanguageSet() )
 			{
 				programmingLanguageStringsOfDeveloper.add(pl.getName());
 			}
-
-
 			if( programmingLanguageStringsOfDeveloper.containsAll(selectedProgrammingLanguages) )
 			{
-				developerWhoCanWriteList.add(new DeveloperWhoCanWrite(developer.getEmail(), selectedProgrammingLanguages));
+				developerWhoCanWriteList.add(new DeveloperWhoCanWrite(developer.getEmail(), new ArrayList<String>(programmingLanguageStringsOfDeveloper)));
 			}
 		}
 
@@ -77,10 +74,58 @@ public class DeveloperController
 	}
 
 	@RequestMapping(value = "/search-developer-who-can-write-and-speak", method = RequestMethod.POST)
-	public String showSearchResultPage(@RequestParam("selectedProgrammingLanguages[]") List<String> selectedProgrammingLanguages, @RequestParam("selectedLanguages[]") List<String> selectedLanguages)
+	public String showSearchResultPage(
+			@RequestParam("selectedProgrammingLanguages[]") List<String> selectedProgrammingLanguages,
+			@RequestParam("selectedLanguages[]") List<String> selectedLanguages,
+			Model model)
 	{
-		System.out.println(selectedProgrammingLanguages);
-		System.out.println(selectedLanguages);
+		List<Developer> developerList = developerRepository.findAll();
+		List<DeveloperWhoCanWriteAndSpeak> developerWhoCanWriteAndSpeakList = new ArrayList<>();
+
+		List<String> programmingLanguageStringsOfDeveloper = new ArrayList<>();
+		List<String> languageStringsOfDeveloper = new ArrayList<>();
+
+		DeveloperWhoCanWriteAndSpeak developerWhoCanWriteAndSpeak;
+		boolean flag1;
+		boolean flag2;
+
+
+		for(Developer developer : developerList)
+		{
+			developerWhoCanWriteAndSpeak = new DeveloperWhoCanWriteAndSpeak();
+			flag1 = false;
+			flag2 = false;
+
+			programmingLanguageStringsOfDeveloper.clear();
+			for( ProgrammingLanguage pl : developer.getProgrammingLanguageSet() )
+			{
+				programmingLanguageStringsOfDeveloper.add(pl.getName());
+			}
+			if( programmingLanguageStringsOfDeveloper.containsAll(selectedProgrammingLanguages) )
+			{
+				flag1 = true;
+				developerWhoCanWriteAndSpeak.setEmail(developer.getEmail());
+				developerWhoCanWriteAndSpeak.setProgrammingLanguageList(new ArrayList<String>(programmingLanguageStringsOfDeveloper));
+			}
+
+			languageStringsOfDeveloper.clear();
+			for( Language l : developer.getLanguageSet() )
+			{
+				languageStringsOfDeveloper.add(l.getName());
+			}
+			if( languageStringsOfDeveloper.containsAll(selectedLanguages) )
+			{
+				flag2 = true;
+				developerWhoCanWriteAndSpeak.setLanguageList(new ArrayList<String>(languageStringsOfDeveloper));
+			}
+
+			if( flag1 && flag2 )
+			{
+				developerWhoCanWriteAndSpeakList.add(developerWhoCanWriteAndSpeak);
+			}
+		}
+
+		model.addAttribute("developerWhoCanWriteAndSpeakList", developerWhoCanWriteAndSpeakList);
 
 		return "developers-who-can-write-and-speak";
 	}
