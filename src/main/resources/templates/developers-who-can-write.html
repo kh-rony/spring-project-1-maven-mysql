@@ -31,8 +31,8 @@
 
                 <tbody>
                 <tr th:each="developerWhoCanWrite : ${developerWhoCanWriteList}">
-                    <td class="" th:text="${developerWhoCanWrite.getEmail()}"></td>
-                    <td class="" th:text="${developerWhoCanWrite.getProgrammingLanguageList()}"></td>
+                    <td th:text="${developerWhoCanWrite.getEmail()}"></td>
+                    <td th:text="${developerWhoCanWrite.getProgrammingLanguageList()}"></td>
                 </tr>
                 </tbody>
 

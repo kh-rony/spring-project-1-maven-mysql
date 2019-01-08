@@ -8,6 +8,7 @@ import com.khrony.springproject1mavenmysql.models.ProgrammingLanguage;
 import com.khrony.springproject1mavenmysql.repositories.DeveloperRepository;
 import com.khrony.springproject1mavenmysql.repositories.LanguageRepository;
 import com.khrony.springproject1mavenmysql.repositories.ProgrammingLanguageRepository;
+import com.khrony.springproject1mavenmysql.services.DeveloperService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +30,8 @@ public class DeveloperController
 
 	@Autowired
 	private LanguageRepository languageRepository;
+
+	private DeveloperService developerService = new DeveloperService();
 
 
 	@RequestMapping("/")
@@ -58,10 +61,8 @@ public class DeveloperController
 		for(Developer developer : developerList)
 		{
 			programmingLanguageStringsOfDeveloper.clear();
-			for( ProgrammingLanguage pl : developer.getProgrammingLanguageSet() )
-			{
-				programmingLanguageStringsOfDeveloper.add(pl.getName());
-			}
+			programmingLanguageStringsOfDeveloper.addAll(developerService.findProgrammingLanguageNameStringListFromSetOfObjects(developer.getProgrammingLanguageSet()));
+
 			if( programmingLanguageStringsOfDeveloper.containsAll(selectedProgrammingLanguages) )
 			{
 				developerWhoCanWriteList.add(new DeveloperWhoCanWrite(developer.getEmail(), new ArrayList<String>(programmingLanguageStringsOfDeveloper)));
@@ -97,10 +98,8 @@ public class DeveloperController
 			flag2 = false;
 
 			programmingLanguageStringsOfDeveloper.clear();
-			for( ProgrammingLanguage pl : developer.getProgrammingLanguageSet() )
-			{
-				programmingLanguageStringsOfDeveloper.add(pl.getName());
-			}
+			programmingLanguageStringsOfDeveloper.addAll(developerService.findProgrammingLanguageNameStringListFromSetOfObjects(developer.getProgrammingLanguageSet()));
+
 			if( programmingLanguageStringsOfDeveloper.containsAll(selectedProgrammingLanguages) )
 			{
 				flag1 = true;
@@ -109,10 +108,8 @@ public class DeveloperController
 			}
 
 			languageStringsOfDeveloper.clear();
-			for( Language l : developer.getLanguageSet() )
-			{
-				languageStringsOfDeveloper.add(l.getName());
-			}
+			languageStringsOfDeveloper.addAll(developerService.findLanguageNameStringListFromSetOfObjects(developer.getLanguageSet()));
+
 			if( languageStringsOfDeveloper.containsAll(selectedLanguages) )
 			{
 				flag2 = true;
@@ -167,6 +164,12 @@ public class DeveloperController
 
 		model.addAttribute("developerWhoCanWriteAndSpeakList", developerWhoCanWriteAndSpeakList);
 
+		return "all-developers";
+	}
+
+	@RequestMapping(value = "/seed", method = RequestMethod.GET)
+	public String seedDB(Model model)
+	{
 		return "all-developers";
 	}
 }

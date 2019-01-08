@@ -32,9 +32,9 @@
 
                 <tbody>
                 <tr th:each="developerWhoCanWriteAndSpeak : ${developerWhoCanWriteAndSpeakList}">
-                    <td class="" th:text="${developerWhoCanWriteAndSpeak.getEmail()}"></td>
-                    <td class="" th:text="${developerWhoCanWriteAndSpeak.getProgrammingLanguageList()}"></td>
-                    <td class="" th:text="${developerWhoCanWriteAndSpeak.getLanguageList()}"></td>
+                    <td th:text="${developerWhoCanWriteAndSpeak.getEmail()}"></td>
+                    <td th:text="${developerWhoCanWriteAndSpeak.getProgrammingLanguageList()}"></td>
+                    <td th:text="${developerWhoCanWriteAndSpeak.getLanguageList()}"></td>
                 </tr>
                 </tbody>
 

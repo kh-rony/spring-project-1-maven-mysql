@@ -1,0 +1,14 @@
+
+INSERT INTO `developers_programming_languages` (`developer_id`, `programming_language_id`) VALUES
+(11, 1),
+(11, 2),
+(11, 3),
+(12, 4),
+(12, 5);
+
+INSERT INTO `developers_languages` (`developer_id`, `language_id`) VALUES
+(11, 6),
+(11, 7),
+(11, 8),
+(12, 9),
+(12, 10);
